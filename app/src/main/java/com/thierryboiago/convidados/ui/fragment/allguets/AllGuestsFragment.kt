@@ -1,4 +1,4 @@
-package com.thierryboiago.convidados.ui.allguets
+package com.thierryboiago.convidados.ui.fragment.allguets
 
 import android.os.Bundle
 import android.view.LayoutInflater

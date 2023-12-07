@@ -1,4 +1,4 @@
-package com.thierryboiago.convidados.ui.present
+package com.thierryboiago.convidados.ui.fragment.present
 
 import android.os.Bundle
 import android.view.LayoutInflater

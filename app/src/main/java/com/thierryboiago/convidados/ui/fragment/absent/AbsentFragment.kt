@@ -1,4 +1,4 @@
-package com.thierryboiago.convidados.ui.absent
+package com.thierryboiago.convidados.ui.fragment.absent
 
 import android.os.Bundle
 import android.view.LayoutInflater

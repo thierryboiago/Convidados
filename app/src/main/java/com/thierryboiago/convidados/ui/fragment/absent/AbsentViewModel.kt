@@ -1,4 +1,4 @@
-package com.thierryboiago.convidados.ui.absent
+package com.thierryboiago.convidados.ui.fragment.absent
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

@@ -63,6 +63,95 @@ class GuestRepository private constructor(context: Context) {
         }
     }
 
+    fun getAll(): List<GuestModel> {
+
+        val list = mutableListOf<GuestModel>()
+        try {
+            val db = guestDatabase.readableDatabase
+            val projection = arrayOf(
+                DataBaseConstants.GUEST.COLUNMS.ID,
+                DataBaseConstants.GUEST.COLUNMS.NAME,
+                DataBaseConstants.GUEST.COLUNMS.PRESENCE,
+            )
+            val cursor = db.query(
+                DataBaseConstants.GUEST.TABLE_NAME,
+                projection,
+                null,
+                null,
+                null,
+                null,
+                null
+            )
+
+            if (cursor != null && cursor.count > 0) {
+                while (cursor.moveToNext()) {
+                    val id =
+                        cursor.getInt(cursor.getColumnIndex(DataBaseConstants.GUEST.COLUNMS.ID))
+                    val name =
+                        cursor.getString(cursor.getColumnIndex(DataBaseConstants.GUEST.COLUNMS.NAME))
+                    val presence =
+                        cursor.getInt(cursor.getColumnIndex(DataBaseConstants.GUEST.COLUNMS.PRESENCE))
+
+                    list.add(GuestModel(id, name, presence == 1))
+                }
+            }
+            cursor.close()
+        } catch (exception: Exception) {
+            return list
+        }
+
+        return list
+
+
+    }
+
+
+    fun getWithPresence(presence: Int): List<GuestModel> {
+
+        val list = mutableListOf<GuestModel>()
+        try {
+            val db = guestDatabase.readableDatabase
+            val projection = arrayOf(
+                DataBaseConstants.GUEST.COLUNMS.ID,
+                DataBaseConstants.GUEST.COLUNMS.NAME,
+                DataBaseConstants.GUEST.COLUNMS.PRESENCE,
+            )
+
+            val selection = DataBaseConstants.GUEST.COLUNMS.PRESENCE + " = ?"
+            val args = arrayOf(presence.toString())
+
+            val cursor = db.query(
+                DataBaseConstants.GUEST.TABLE_NAME,
+                projection,
+                selection,
+                args,
+                null,
+                null,
+                null
+            )
+
+            if (cursor != null && cursor.count > 0) {
+                while (cursor.moveToNext()) {
+                    val id =
+                        cursor.getInt(cursor.getColumnIndex(DataBaseConstants.GUEST.COLUNMS.ID))
+                    val name =
+                        cursor.getString(cursor.getColumnIndex(DataBaseConstants.GUEST.COLUNMS.NAME))
+                    val presence =
+                        cursor.getInt(cursor.getColumnIndex(DataBaseConstants.GUEST.COLUNMS.PRESENCE))
+
+                    list.add(GuestModel(id, name, presence == 1))
+                }
+            }
+            cursor.close()
+        } catch (exception: Exception) {
+            return list
+        }
+
+        return list
+
+
+    }
+
 
     companion object {
         private lateinit var repository: GuestRepository

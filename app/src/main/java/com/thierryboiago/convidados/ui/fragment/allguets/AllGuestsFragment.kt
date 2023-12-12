@@ -4,17 +4,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.thierryboiago.convidados.databinding.FragmentAllGuestsBinding
+import com.thierryboiago.convidados.ui.fragment.adapter.GuestAdapter
+import com.thierryboiago.convidados.ui.listener.OnGuestListener
 
 class AllGuestsFragment : Fragment() {
 
     private var _binding: FragmentAllGuestsBinding? = null
+    private lateinit var viewModel: AllGuestsViewModel
+    private var adapter = GuestAdapter()
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -22,21 +27,44 @@ class AllGuestsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val viewModel =
+        viewModel =
             ViewModelProvider(this).get(AllGuestsViewModel::class.java)
 
         _binding = FragmentAllGuestsBinding.inflate(inflater, container, false)
-        val root: View = binding.root
 
-        val textView: TextView = binding.textHome
-        viewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
+        binding.recyclerAllGuests.layoutManager = LinearLayoutManager(context)
+        binding.recyclerAllGuests.adapter = adapter
+
+        val listener = object : OnGuestListener {
+            override fun onClick(id: Int) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onDelete(id: Int) {
+                viewModel.delete(id)
+                viewModel.getAll()
+            }
+
         }
-        return root
+
+        adapter.setListener(listener)
+
+        viewModel.getAll()
+
+        observer()
+
+        return binding.root
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun observer() {
+        viewModel.listAllguests.observe(viewLifecycleOwner) {
+            adapter.setList(it)
+
+        }
     }
 }

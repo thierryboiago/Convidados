@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.thierryboiago.convidados.databinding.FragmentAllGuestsBinding
 import com.thierryboiago.convidados.repository.constants.DataBaseConstants
 import com.thierryboiago.convidados.ui.activity.guestform.GuestFormActivity
@@ -18,7 +17,7 @@ import com.thierryboiago.convidados.ui.listener.OnGuestListener
 class AllGuestsFragment : Fragment() {
 
     private var _binding: FragmentAllGuestsBinding? = null
-    private lateinit var viewModel: AllGuestsViewModel
+    private lateinit var viewModel: GuestsViewModel
     private var adapter = GuestAdapter()
 
     private val binding get() = _binding!!
@@ -29,12 +28,12 @@ class AllGuestsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         viewModel =
-            ViewModelProvider(this).get(AllGuestsViewModel::class.java)
+            ViewModelProvider(this).get(GuestsViewModel::class.java)
 
         _binding = FragmentAllGuestsBinding.inflate(inflater, container, false)
 
-        binding.recyclerAllGuests.layoutManager = LinearLayoutManager(context)
-        binding.recyclerAllGuests.adapter = adapter
+        binding.recyclerGuests.layoutManager = LinearLayoutManager(context)
+        binding.recyclerGuests.adapter = adapter
 
         val listener = object : OnGuestListener {
             override fun onClick(id: Int) {

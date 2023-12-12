@@ -152,6 +152,51 @@ class GuestRepository private constructor(context: Context) {
 
     }
 
+    fun getGuest(id: Int): GuestModel? {
+
+        var guest : GuestModel? = null
+        try {
+            val db = guestDatabase.readableDatabase
+            val projection = arrayOf(
+                DataBaseConstants.GUEST.COLUNMS.ID,
+                DataBaseConstants.GUEST.COLUNMS.NAME,
+                DataBaseConstants.GUEST.COLUNMS.PRESENCE,
+            )
+
+            val selection = DataBaseConstants.GUEST.COLUNMS.ID + " = ?"
+            val args = arrayOf(id.toString())
+
+            val cursor = db.query(
+                DataBaseConstants.GUEST.TABLE_NAME,
+                projection,
+                selection,
+                args,
+                null,
+                null,
+                null
+            )
+
+            if (cursor != null && cursor.count > 0) {
+                while (cursor.moveToNext()) {
+
+                    val name =
+                        cursor.getString(cursor.getColumnIndex(DataBaseConstants.GUEST.COLUNMS.NAME))
+                    val presence =
+                        cursor.getInt(cursor.getColumnIndex(DataBaseConstants.GUEST.COLUNMS.PRESENCE))
+
+                    guest = GuestModel(id, name, presence)
+                }
+            }
+            cursor.close()
+        } catch (exception: Exception) {
+            return guest
+        }
+
+        return guest
+
+
+    }
+
 
     companion object {
         private lateinit var repository: GuestRepository

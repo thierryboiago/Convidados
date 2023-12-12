@@ -1,16 +1,17 @@
 package com.thierryboiago.convidados.ui.fragment.allguets
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.thierryboiago.convidados.databinding.FragmentAllGuestsBinding
+import com.thierryboiago.convidados.repository.constants.DataBaseConstants
+import com.thierryboiago.convidados.ui.activity.guestform.GuestFormActivity
 import com.thierryboiago.convidados.ui.fragment.adapter.GuestAdapter
 import com.thierryboiago.convidados.ui.listener.OnGuestListener
 
@@ -37,7 +38,13 @@ class AllGuestsFragment : Fragment() {
 
         val listener = object : OnGuestListener {
             override fun onClick(id: Int) {
-                TODO("Not yet implemented")
+                val intent = Intent(context, GuestFormActivity::class.java)
+
+                val bundle = Bundle()
+                bundle.putInt(DataBaseConstants.GUEST.ID, id)
+                intent.putExtras(bundle)
+
+                startActivity(intent)
             }
 
             override fun onDelete(id: Int) {
@@ -49,7 +56,7 @@ class AllGuestsFragment : Fragment() {
 
         adapter.setListener(listener)
 
-        viewModel.getAll()
+
 
         observer()
 
@@ -59,6 +66,12 @@ class AllGuestsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        viewModel.getAll()
     }
 
     private fun observer() {
